@@ -1,3 +1,5 @@
+//https://github.com/kuro00128/atcoder-library
+//上がatcoderのライブラリ置き場です
 #include <bits/stdc++.h>
 #include <atcoder/modint>
 #include <atcoder/dsu>
