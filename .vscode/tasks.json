@@ -1,0 +1,67 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "build",
+      "type": "shell",
+      "command": "g++",
+      "args": [
+        "-include", "${env:HOME}/pch/all.h", "-Winvalid-pch",
+        "-std=c++20", "-O0", "-Wall", "-Wextra", "-Wno-sign-compare",
+        "-DLOCAL", "-D_GLIBCXX_DEBUG", "-fsanitize=address,undefined",
+        "-I", "${env:HOME}/ac-library", "-I", "${env:HOME}/atcoder/lib",
+        "${file}", "-o", "${fileDirname}/a.out"
+      ],
+      "problemMatcher": ["$gcc"]
+    },
+    {
+      "label": "test",
+      "type": "shell",
+      "command": "if [ -d test ]; then ${env:HOME}/.local/bin/oj t -c ./a.out -d test; else echo 'Build OK (no tests)'; fi",
+      "options": { "cwd": "${fileDirname}" },
+      "dependsOn": "build",
+      "group": { "kind": "build", "isDefault": true },
+      "problemMatcher": []
+    },
+    {
+      "label": "run",
+      "type": "shell",
+      "command": "./a.out < in.txt",
+      "options": { "cwd": "${fileDirname}" },
+      "dependsOn": "build",
+      "problemMatcher": []
+    },
+    {
+      "label": "build-fast",
+      "type": "shell",
+      "command": "g++",
+      "args": [
+        "-std=c++20", "-O2",
+        "-I", "${env:HOME}/ac-library",
+        "${file}", "-o", "${fileDirname}/fast.out"
+      ],
+      "problemMatcher": ["$gcc"]
+    },
+    {
+      "label": "test-fast",
+      "type": "shell",
+      "command": "${env:HOME}/.local/bin/oj t -c ./fast.out -d test --tle 2",
+      "options": { "cwd": "${fileDirname}" },
+      "dependsOn": "build-fast",
+      "problemMatcher": []
+    },
+    {
+      "label": "copy",
+      "type": "shell",
+      "command": "/mnt/c/Windows/System32/clip.exe < '${file}' && echo 'Copied'",
+      "problemMatcher": []
+    },
+    {
+      "label": "submit",
+      "type": "shell",
+      "command": "${env:HOME}/atcoder/tools/submit.sh '${file}'",
+      "dependsOn": "test",
+      "problemMatcher": []
+    }
+  ]
+}
