@@ -62,6 +62,12 @@
       "command": "${env:HOME}/atcoder/tools/submit.sh '${file}'",
       "dependsOn": "test",
       "problemMatcher": []
+    },
+    {
+      "label": "reset",
+      "type": "shell",
+      "command": "cp ~/atcoder/template.cpp '${file}' && echo 'reset: ${file}'",
+      "problemMatcher": []
     }
   ]
 }

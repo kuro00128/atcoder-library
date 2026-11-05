@@ -147,5 +147,28 @@ inline bool intersect(Point A, Point B, Point C, Point D){
   ll c4 = cross(D - C, B - C);
   return ((c1 > 0 and c2 < 0) or (c1 < 0 and c2 > 0)) and ((c3 > 0 and c4 < 0) or (c3 < 0 and c4 > 0));
 }
+vector<mint> fact, fact_inv, inv;
+inline void comb_init(int n){
+  fact.assign(n + 1, 1);
+  fact_inv.assign(n + 1, 1);
+  inv.assign(n + 1, 1);
+  for(int i = 2; i <= n; i++){
+    fact[i] = fact[i - 1] * i;
+    inv[i] = -inv[mint::mod() % i] * (mint::mod() / i);
+    fact_inv[i] = fact_inv[i - 1] * inv[i];
+  }
+}
+inline mint nCr(ll n, ll r){
+  if(n < 0 || r < 0 || r > n) return 0;
+  return fact[n] * fact_inv[r] * fact_inv[n - r];
+}
+inline mint nPr(ll n, ll r){
+  if(n < 0 || r < 0 || r > n) return 0;
+  return fact[n] * fact_inv[n - r];
+}
+inline mint nHr(ll n, ll r){
+  if(n == 0 && r == 0) return 1;
+  return nCr(n + r - 1, r);
+}
 int main(){
 }
