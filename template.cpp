@@ -166,13 +166,13 @@ struct RollingHash {
   static u64 mul(u64 a, u64 b) { return (u64)((__uint128_t)a * b % MOD); }
   static u64 base() {
     static const u64 B = std::mt19937_64(
-        std::chrono::steady_clock::now().time_since_epoch().count())() % (MOD - 2) + 2;
+        chrono::steady_clock::now().time_since_epoch().count())() % (MOD - 2) + 2;
     return B;
   }
  
   std::vector<u64> H, pw;
-  RollingHash(const std::string &s) { init(s); }
-  void init(const std::string &s) {
+  RollingHash(const string &s) { init(s); }
+  void init(const string &s) {
     int n = s.size();
     H.assign(n + 1, 0);
     pw.assign(n + 1, 1);
