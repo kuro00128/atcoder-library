@@ -93,7 +93,6 @@ template<class T> struct UnionFind{
   bool issame(int x, int y){
     return root(x) == root(y);
   }
-  // weight(y) - weight(x) = w となるように併合する
   bool merge(int x, int y, T w){
     w += weight(x); w -= weight(y);
     x = root(x); y = root(y);
@@ -111,7 +110,6 @@ template<class T> struct UnionFind{
     return siz[root(x)];
   }
 };
-//* added 2026/9/30 *//
 struct Point{
   ll x, y;
   Point operator+(const Point &p) const{ return {x + p.x, y + p.y}; }
