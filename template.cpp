@@ -160,5 +160,30 @@ inline mint nHr(ll n, ll r){
   if(n == 0 && r == 0) return 1;
   return nCr(n + r - 1, r);
 }
+struct RollingHash {
+  using u64 = unsigned long long;
+  static constexpr u64 MOD = (1ULL << 61) - 1;
+  static u64 mul(u64 a, u64 b) { return (u64)((__uint128_t)a * b % MOD); }
+  static u64 base() {
+    static const u64 B = std::mt19937_64(
+        std::chrono::steady_clock::now().time_since_epoch().count())() % (MOD - 2) + 2;
+    return B;
+  }
+ 
+  std::vector<u64> H, pw;
+  RollingHash(const std::string &s) { init(s); }
+  void init(const std::string &s) {
+    int n = s.size();
+    H.assign(n + 1, 0);
+    pw.assign(n + 1, 1);
+    for (int i = 0; i < n; i++) {
+      H[i + 1] = (mul(H[i], base()) + s[i]) % MOD;
+      pw[i + 1] = mul(pw[i], base());
+    }
+  }
+  u64 get(int l, int r) const {
+    return (H[r] + MOD - mul(H[l], pw[r - l])) % MOD;
+  }
+};
 int main(){
 }
