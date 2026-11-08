@@ -70,30 +70,21 @@ inline vector<pair<ll, ll>> rle(vector<ll> s){
   return res;
 }
 template<class T> struct UnionFind{
-  vector<int> par;
-  vector<int> rank;
+  vector<int> par, siz;
   vector<T> diff_weight;
-  
+
   UnionFind(int n = 1, T SUM_UNITY = 0){
     init(n, SUM_UNITY);
   }
   void init(int n = 1, T SUM_UNITY = 0){
-    par.resize(n); rank.resize(n); diff_weight.resize(n);
-    rep(i, n){
-      par[i] = i;
-      rank[i] = 0;
-      diff_weight[i] = SUM_UNITY;
-    }
+    par.resize(n); siz.assign(n, 1); diff_weight.assign(n, SUM_UNITY);
+    rep(i, n) par[i] = i;
   }
   int root(int x){
-    if(par[x] == x){
-      return x;
-    }
-    else{
-      int r = root(par[x]);
-      diff_weight[x] += diff_weight[par[x]];
-      return par[x] = r;
-    }
+    if(par[x] == x) return x;
+    int r = root(par[x]);
+    diff_weight[x] += diff_weight[par[x]];
+    return par[x] = r;
   }
   T weight(int x){
     root(x);
@@ -102,21 +93,22 @@ template<class T> struct UnionFind{
   bool issame(int x, int y){
     return root(x) == root(y);
   }
+  // weight(y) - weight(x) = w となるように併合する
   bool merge(int x, int y, T w){
     w += weight(x); w -= weight(y);
     x = root(x); y = root(y);
     if(x == y) return false;
-    if(rank[x] < rank[y]) swap(x, y), w *= -1;
-    if(rank[x] == rank[y]) rank[x]++;
+    if(siz[x] < siz[y]) swap(x, y), w = -w;
     par[y] = x;
+    siz[x] += siz[y];
     diff_weight[y] = w;
     return true;
   }
   T diff(int x, int y){
     return weight(y) - weight(x);
   }
-  int size(int x) {
-    return -par[root(x)];
+  int size(int x){
+    return siz[root(x)];
   }
 };
 //* added 2026/9/30 *//
