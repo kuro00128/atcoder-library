@@ -184,6 +184,9 @@ struct RollingHash {
   u64 get(int l, int r) const {
     return (H[r] + MOD - mul(H[l], pw[r - l])) % MOD;
   }
+   u64 combine(u64 X, u64 Y, ll len) const{
+    return (mul(X, pw[len]) + Y) % MOD;
+  }
 };
 int main(){
 }
