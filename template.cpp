@@ -26,7 +26,7 @@ const ll mod = 998244353;
 using mint = modint998244353;
 mt19937_64 rng(10);
 vector<int> dx = {1, 0, -1, 0}, dy = {0, 1, 0, -1};
-inline ll P(ll x, ll n){
+inline ll ipow(ll x, ll n){
   ll ret = 1;
   while(n > 0){
     if(n & 1) ret *= x;
@@ -34,11 +34,13 @@ inline ll P(ll x, ll n){
   }
   return ret;
 }
-inline ll Pmod(ll x, ll n, ll mod){
-  ll ret = 1;
+inline ll powmod(ll x, ll n, ll m){
+  ll ret = 1 % m;
+  x %= m;
+  if(x < 0) x += m;
   while(n > 0){
-    if(n & 1) ret *= x, ret %= mod;
-    x = (x % mod) * (x % mod) % mod;
+    if(n & 1) ret = ret * x % m;
+    x = x * x % m;
     n >>= 1;
   }
   return ret;
