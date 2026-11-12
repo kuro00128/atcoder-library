@@ -7,7 +7,8 @@
       "command": "g++",
       "args": [
         "-include", "${env:HOME}/pch/all.h", "-Winvalid-pch",
-        "-std=c++20", "-O0", "-Wall", "-Wextra", "-Wno-sign-compare",
+        "-std=c++20", "-O0", "-g", "-fno-omit-frame-pointer",
+        "-Wall", "-Wextra", "-Wno-sign-compare",
         "-DLOCAL", "-D_GLIBCXX_DEBUG", "-fsanitize=address,undefined",
         "-I", "${env:HOME}/ac-library", "-I", "${env:HOME}/atcoder/lib",
         "${file}", "-o", "${fileDirname}/a.out"
@@ -17,7 +18,7 @@
     {
       "label": "test",
       "type": "shell",
-      "command": "if [ -d test ]; then ${env:HOME}/.local/bin/oj t -c ./a.out -d test; else echo 'Build OK (no tests)'; fi",
+      "command": "if [ -d test ]; then ASAN_OPTIONS=handle_abort=1 ${env:HOME}/.local/bin/oj t -c ./a.out -d test; else echo 'Build OK (no tests)'; fi",
       "options": { "cwd": "${fileDirname}" },
       "dependsOn": "build",
       "group": { "kind": "build", "isDefault": true },
@@ -26,7 +27,7 @@
     {
       "label": "run",
       "type": "shell",
-      "command": "./a.out < in.txt",
+      "command": "ASAN_OPTIONS=handle_abort=1 ./a.out < in.txt",
       "options": { "cwd": "${fileDirname}" },
       "dependsOn": "build",
       "problemMatcher": []
