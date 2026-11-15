@@ -71,6 +71,14 @@ inline vector<pair<ll, ll>> rle(vector<ll> s){
   res.push_back({s.back(), cnt});
   return res;
 }
+// 二分探索の型：f(ok) = true, f(ng) = false を保つ。ループ本体は変えない
+template<class F> ll bsearch(ll ok, ll ng, F f){
+  while(abs(ok - ng) > 1){
+    ll mid = (ok + ng) / 2;
+    if(f(mid)) ok = mid; else ng = mid;
+  }
+  return ok;
+}
 template<class T> struct UnionFind{
   vector<int> par, siz;
   vector<T> diff_weight;
