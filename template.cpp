@@ -1,3 +1,4 @@
+#pragma region header
 //https://github.com/kuro00128/atcoder-library
 //上がatcoderのライブラリ置き場です
 #include <bits/stdc++.h>
@@ -14,6 +15,7 @@ using namespace atcoder;
 #else
 #define debug(...)
 #endif
+#pragma endregion
 typedef long long ll;
 typedef unsigned long long ull;
 typedef long double lb;
@@ -26,6 +28,7 @@ const ll mod = 998244353;
 using mint = modint998244353;
 mt19937_64 rng(10);
 vector<int> dx = {1, 0, -1, 0}, dy = {0, 1, 0, -1};
+#pragma region library
 inline ll ipow(ll x, ll n){
   ll ret = 1;
   while(n > 0){
@@ -199,6 +202,7 @@ struct RollingHash {
     return (mul(X, pw[len]) + Y) % MOD;
   }
 };
+#pragma endregion
 int main(){
   ios::sync_with_stdio(false); 
   cin.tie(nullptr);
