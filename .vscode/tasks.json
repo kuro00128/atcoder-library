@@ -8,7 +8,7 @@
       "args": [
         "-include", "${env:HOME}/pch/all.h", "-Winvalid-pch",
         "-std=c++20", "-O0", "-g", "-fno-omit-frame-pointer",
-        "-Wall", "-Wextra", "-Wno-sign-compare",
+                "-Wall", "-Wextra", "-Wno-sign-compare", "-Wno-unknown-pragmas",
         "-DLOCAL", "-D_GLIBCXX_DEBUG", "-fsanitize=address,undefined",
         "-I", "${env:HOME}/ac-library", "-I", "${env:HOME}/atcoder/lib",
         "${file}", "-o", "${fileDirname}/a.out"

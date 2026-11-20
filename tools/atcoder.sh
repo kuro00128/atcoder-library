@@ -10,7 +10,7 @@ export ASAN_OPTIONS=handle_abort=1
 
 ATC_DIR=~/atcoder
 ATC_LETTERS=abcdefghijklmnopqrstuvwxyz
-ATC_CXXFLAGS="-include $HOME/pch/all.h -Winvalid-pch -std=c++20 -O0 -g -fno-omit-frame-pointer -Wall -Wextra -Wno-sign-compare -DLOCAL -D_GLIBCXX_DEBUG -fsanitize=address,undefined -I $HOME/ac-library -I $ATC_DIR/lib"
+ATC_CXXFLAGS="-include $HOME/pch/all.h -Winvalid-pch -std=c++20 -O0 -g -fno-omit-frame-pointer -Wall -Wextra -Wno-sign-compare -Wno-unknown-pragmas -DLOCAL -D_GLIBCXX_DEBUG -fsanitize=address,undefined -I $HOME/ac-library -I $ATC_DIR/lib"
 
 # ============================================================
 #  internal helpers
