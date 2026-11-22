@@ -1,5 +1,6 @@
 //https://github.com/kuro00128/atcoder-library
 //no-ACL version (ACL-compatible library included)
+#pragma region header
 #include <bits/stdc++.h>
 
 using namespace std;
@@ -16,12 +17,11 @@ static const double pi = 3.141592653589793;
 const ll INF = 1LL << 60;
 //const ll mod = 1000000007;
 const ll mod = 998244353;
+#pragma endregion
 
-// ============================================================
-//  ACL-compatible library (same usage as AtCoder Library)
-// ============================================================
+#pragma region ACL-compatible library
 
-// ---------- math ----------
+#pragma region math
 inline ll safe_mod(ll x, ll m){ x %= m; if(x < 0) x += m; return x; }
 // returns {g, x} : g = gcd(a, b), a * x = g (mod b), 0 <= x < b / g
 inline pair<ll, ll> inv_gcd(ll a, ll b){
@@ -87,7 +87,8 @@ inline ll floor_sum(ll n, ll m, ll a, ll b){
   return ans + floor_sum_unsigned(n, m, a, b);
 }
 
-// ---------- modint ----------
+#pragma endregion
+#pragma region modint
 template<int MOD> struct static_modint{
   using mint = static_modint;
   unsigned int v;
@@ -155,7 +156,8 @@ using modint = dynamic_modint<-1>;
 //using mint = modint1000000007;
 using mint = modint998244353;
 
-// ---------- convolution ----------
+#pragma endregion
+#pragma region convolution
 inline int primitive_root_of(int m){
   if(m == 2) return 1;
   if(m == 998244353 || m == 167772161 || m == 469762049) return 3;
@@ -241,7 +243,8 @@ inline vector<ll> convolution_ll(const vector<ll>& a, const vector<ll>& b){
   return c;
 }
 
-// ---------- string ----------
+#pragma endregion
+#pragma region string
 // s[i] in [0, upper]
 inline vector<int> suffix_array(const vector<int>& s0, int upper){
   int n0 = s0.size();
@@ -325,7 +328,8 @@ template<class S> vector<int> z_algorithm(const S& s){
   return z;
 }
 
-// ---------- dsu ----------
+#pragma endregion
+#pragma region dsu
 struct dsu{
   int n; vector<int> p;
   dsu(int n_ = 0) : n(n_), p(n_, -1){}
@@ -347,7 +351,8 @@ struct dsu{
   }
 };
 
-// ---------- fenwick tree ----------
+#pragma endregion
+#pragma region fenwick tree
 template<class T> struct fenwick_tree{
   int n; vector<T> d;
   fenwick_tree(int n_ = 0) : n(n_), d(n_, T(0)){}
@@ -356,7 +361,8 @@ template<class T> struct fenwick_tree{
   T sum(int l, int r){ return sum(r) - sum(l); }
 };
 
-// ---------- segtree ----------
+#pragma endregion
+#pragma region segtree
 template<class S, S (*op)(S, S), S (*e)()> struct segtree{
   int n, sz, lg; vector<S> d;
   segtree(int n_ = 0) : segtree(vector<S>(n_, e())){}
@@ -409,7 +415,8 @@ template<class S, S (*op)(S, S), S (*e)()> struct segtree{
   }
 };
 
-// ---------- lazy segtree ----------
+#pragma endregion
+#pragma region lazy segtree
 template<class S, S (*op)(S, S), S (*e)(), class F, S (*mapping)(F, S), F (*composition)(F, F), F (*id)()>
 struct lazy_segtree{
   int n, sz, lg; vector<S> d; vector<F> lz;
@@ -490,7 +497,8 @@ struct lazy_segtree{
   }
 };
 
-// ---------- scc ----------
+#pragma endregion
+#pragma region scc
 struct scc_graph{
   int n; vector<vector<int>> g, rg;
   scc_graph(int n_ = 0) : n(n_), g(n_), rg(n_){}
@@ -534,7 +542,8 @@ struct scc_graph{
   }
 };
 
-// ---------- two sat ----------
+#pragma endregion
+#pragma region two sat
 struct two_sat{
   int n; vector<bool> ans; scc_graph sg;
   two_sat(int n_ = 0) : n(n_), ans(n_), sg(2 * n_){}
@@ -554,7 +563,8 @@ struct two_sat{
   vector<bool> answer(){ return ans; }
 };
 
-// ---------- max flow ----------
+#pragma endregion
+#pragma region max flow
 template<class Cap> struct mf_graph{
   struct edge{ int from, to; Cap cap, flow; };
   struct _edge{ int to, rev; Cap cap; };
@@ -625,7 +635,8 @@ template<class Cap> struct mf_graph{
   }
 };
 
-// ---------- min cost flow (cost >= 0) ----------
+#pragma endregion
+#pragma region min cost flow (cost >= 0)
 template<class Cap, class Cost> struct mcf_graph{
   struct edge{ int from, to; Cap cap, flow; Cost cost; };
   struct _edge{ int to, rev; Cap cap; Cost cost; };
@@ -687,9 +698,10 @@ template<class Cap, class Cost> struct mcf_graph{
     return res;
   }
 };
-// ============================================================
-//  end of ACL-compatible library
-// ============================================================
+#pragma endregion
+#pragma endregion
+
+#pragma region my library
 
 mt19937_64 rng(10);
 vector<int> dx = {1, 0, -1, 0}, dy = {0, 1, 0, -1};
@@ -873,5 +885,7 @@ inline int lcp(const RollingHash& a, int i, const RollingHash& b, int j){
   }
   return lo;
 }
+#pragma endregion
+
 int main(){
 }
