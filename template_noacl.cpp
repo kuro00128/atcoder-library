@@ -22,9 +22,9 @@ const ll mod = 998244353;
 #pragma region ACL-compatible library
 
 #pragma region math
-inline ll safe_mod(ll x, ll m){ x %= m; if(x < 0) x += m; return x; }
+template<class = void> ll safe_mod(ll x, ll m){ x %= m; if(x < 0) x += m; return x; }
 // returns {g, x} : g = gcd(a, b), a * x = g (mod b), 0 <= x < b / g
-inline pair<ll, ll> inv_gcd(ll a, ll b){
+template<class = void> pair<ll, ll> inv_gcd(ll a, ll b){
   a = safe_mod(a, b);
   if(a == 0) return {b, 0};
   ll s = b, t = a, m0 = 0, m1 = 1;
@@ -36,19 +36,19 @@ inline pair<ll, ll> inv_gcd(ll a, ll b){
   if(m0 < 0) m0 += b / s;
   return {s, m0};
 }
-inline ll pow_mod(ll x, ll n, int m){
+template<class = void> ll pow_mod(ll x, ll n, int m){
   if(m == 1) return 0;
   ull r = 1, y = safe_mod(x, m);
   while(n){ if(n & 1) r = r * y % m; y = y * y % m; n >>= 1; }
   return (ll)r;
 }
-inline ll inv_mod(ll x, ll m){
+template<class = void> ll inv_mod(ll x, ll m){
   auto z = inv_gcd(x, m);
   assert(z.first == 1);
   return z.second;
 }
 // x = r[i] (mod m[i]) for all i -> {y, z} (x = y mod z), no solution -> {0, 0}
-inline pair<ll, ll> crt(const vector<ll>& r, const vector<ll>& m){
+template<class = void> pair<ll, ll> crt(const vector<ll>& r, const vector<ll>& m){
   assert(r.size() == m.size());
   ll r0 = 0, m0 = 1;
   for(int i = 0; i < (int)r.size(); i++){
@@ -67,7 +67,7 @@ inline pair<ll, ll> crt(const vector<ll>& r, const vector<ll>& m){
   }
   return {r0, m0};
 }
-inline ull floor_sum_unsigned(ull n, ull m, ull a, ull b){
+template<class = void> ull floor_sum_unsigned(ull n, ull m, ull a, ull b){
   ull ans = 0;
   while(true){
     if(a >= m){ ans += n * (n - 1) / 2 * (a / m); a %= m; }
@@ -80,7 +80,7 @@ inline ull floor_sum_unsigned(ull n, ull m, ull a, ull b){
   return ans;
 }
 // sum_{i=0}^{n-1} floor((a * i + b) / m)
-inline ll floor_sum(ll n, ll m, ll a, ll b){
+template<class = void> ll floor_sum(ll n, ll m, ll a, ll b){
   ull ans = 0;
   if(a < 0){ ull a2 = safe_mod(a, m); ans -= 1ULL * n * (n - 1) / 2 * ((a2 - a) / m); a = a2; }
   if(b < 0){ ull b2 = safe_mod(b, m); ans -= 1ULL * n * ((b2 - b) / m); b = b2; }
@@ -158,7 +158,7 @@ using mint = modint998244353;
 
 #pragma endregion
 #pragma region convolution
-inline int primitive_root_of(int m){
+template<class = void> int primitive_root_of(int m){
   if(m == 2) return 1;
   if(m == 998244353 || m == 167772161 || m == 469762049) return 3;
   if(m == 754974721) return 11;
@@ -223,7 +223,7 @@ vector<T> convolution(const vector<T>& a, const vector<T>& b){
   return c;
 }
 // exact convolution (result must fit in ll)
-inline vector<ll> convolution_ll(const vector<ll>& a, const vector<ll>& b){
+template<class = void> vector<ll> convolution_ll(const vector<ll>& a, const vector<ll>& b){
   int n = a.size(), m = b.size();
   if(!n || !m) return {};
   constexpr int M1 = 754974721, M2 = 167772161, M3 = 469762049;
@@ -246,7 +246,7 @@ inline vector<ll> convolution_ll(const vector<ll>& a, const vector<ll>& b){
 #pragma endregion
 #pragma region string
 // s[i] in [0, upper]
-inline vector<int> suffix_array(const vector<int>& s0, int upper){
+template<class = void> vector<int> suffix_array(const vector<int>& s0, int upper){
   int n0 = s0.size();
   if(n0 == 0) return {};
   vector<int> s(n0 + 1);
@@ -291,7 +291,7 @@ template<class T> vector<int> suffix_array(const vector<T>& s){
   }
   return suffix_array(s2, now);
 }
-inline vector<int> suffix_array(const string& s){
+template<class = void> vector<int> suffix_array(const string& s){
   vector<int> s2(s.size());
   for(int i = 0; i < (int)s.size(); i++) s2[i] = (unsigned char)s[i];
   return suffix_array(s2, 255);
@@ -330,9 +330,9 @@ template<class S> vector<int> z_algorithm(const S& s){
 
 #pragma endregion
 #pragma region dsu
-struct dsu{
+template<class = void> struct dsu_t{
   int n; vector<int> p;
-  dsu(int n_ = 0) : n(n_), p(n_, -1){}
+  dsu_t(int n_ = 0) : n(n_), p(n_, -1){}
   int leader(int a){ return p[a] < 0 ? a : p[a] = leader(p[a]); }
   int merge(int a, int b){
     int x = leader(a), y = leader(b);
@@ -350,6 +350,7 @@ struct dsu{
     return r;
   }
 };
+using dsu = dsu_t<>;
 
 #pragma endregion
 #pragma region fenwick tree
@@ -499,9 +500,9 @@ struct lazy_segtree{
 
 #pragma endregion
 #pragma region scc
-struct scc_graph{
+template<class = void> struct scc_graph_t{
   int n; vector<vector<int>> g, rg;
-  scc_graph(int n_ = 0) : n(n_), g(n_), rg(n_){}
+  scc_graph_t(int n_ = 0) : n(n_), g(n_), rg(n_){}
   void add_edge(int from, int to){ g[from].push_back(to); rg[to].push_back(from); }
   // returns {number of components, id of each vertex (topological order)}
   pair<int, vector<int>> scc_ids(){
@@ -541,12 +542,13 @@ struct scc_graph{
     return gr;
   }
 };
+using scc_graph = scc_graph_t<>;
 
 #pragma endregion
 #pragma region two sat
-struct two_sat{
+template<class = void> struct two_sat_t{
   int n; vector<bool> ans; scc_graph sg;
-  two_sat(int n_ = 0) : n(n_), ans(n_), sg(2 * n_){}
+  two_sat_t(int n_ = 0) : n(n_), ans(n_), sg(2 * n_){}
   // (x_i == f) || (x_j == g)
   void add_clause(int i, bool f, int j, bool g){
     sg.add_edge(2 * i + (f ? 0 : 1), 2 * j + (g ? 1 : 0));
@@ -562,6 +564,7 @@ struct two_sat{
   }
   vector<bool> answer(){ return ans; }
 };
+using two_sat = two_sat_t<>;
 
 #pragma endregion
 #pragma region max flow
@@ -705,15 +708,16 @@ template<class Cap, class Cost> struct mcf_graph{
 
 mt19937_64 rng(10);
 vector<int> dx = {1, 0, -1, 0}, dy = {0, 1, 0, -1};
-inline ll ipow(ll x, ll n){
+template<class = void> ll ipow(ll x, ll n){
   ll ret = 1;
   while(n > 0){
     if(n & 1) ret *= x;
-    x *= x, n >>= 1;
+    n >>= 1;
+    if(n > 0) x *= x;
   }
   return ret;
 }
-inline ll powmod(ll x, ll n, ll m){
+template<class = void> ll powmod(ll x, ll n, ll m){
   ll ret = 1 % m;
   x %= m;
   if(x < 0) x += m;
@@ -724,7 +728,7 @@ inline ll powmod(ll x, ll n, ll m){
   }
   return ret;
 }
-inline vector<pair<char, ll>> rle(string s){
+template<class = void> vector<pair<char, ll>> rle(string s){
   vector<pair<char, ll>> res;
   ll cnt = 1;
   for(int i = 1; i < (int)s.size(); i++){
@@ -737,7 +741,7 @@ inline vector<pair<char, ll>> rle(string s){
   res.push_back({s.back(), cnt});
   return res;
 }
-inline vector<pair<ll, ll>> rle(vector<ll> s){
+template<class = void> vector<pair<ll, ll>> rle(vector<ll> s){
   vector<pair<ll, ll>> res;
   ll cnt = 1;
   for(int i = 1; i < (int)s.size(); i++){
@@ -804,16 +808,16 @@ struct Point{
   }
 };
 
-inline ll dot(Point a, Point b){ return a.x * b.x + a.y * b.y; }
+template<class = void> ll dot(Point a, Point b){ return a.x * b.x + a.y * b.y; }
 
-inline ll cross(Point a, Point b){ return a.x * b.y - a.y * b.x; }
+template<class = void> ll cross(Point a, Point b){ return a.x * b.y - a.y * b.x; }
 
-inline ll dist2(Point a, Point b){
+template<class = void> ll dist2(Point a, Point b){
   ll dx = a.x - b.x;
   ll dy = a.y - b.y;
   return dx * dx + dy * dy;
 }
-inline bool intersect(Point A, Point B, Point C, Point D){
+template<class = void> bool intersect(Point A, Point B, Point C, Point D){
   ll c1 = cross(B - A, C - A);
   ll c2 = cross(B - A, D - A);
   ll c3 = cross(D - C, A - C);
@@ -822,7 +826,7 @@ inline bool intersect(Point A, Point B, Point C, Point D){
 }
 // combination: call comb_init(n) before use
 vector<mint> fact, fact_inv, inv;
-inline void comb_init(int n){
+template<class = void> void comb_init(int n){
   fact.assign(n + 1, 1);
   fact_inv.assign(n + 1, 1);
   inv.assign(n + 1, 1);
@@ -832,20 +836,20 @@ inline void comb_init(int n){
     fact_inv[i] = fact_inv[i - 1] * inv[i];
   }
 }
-inline mint nCr(ll n, ll r){
+template<class = void> mint nCr(ll n, ll r){
   if(n < 0 || r < 0 || r > n) return 0;
   return fact[n] * fact_inv[r] * fact_inv[n - r];
 }
-inline mint nPr(ll n, ll r){
+template<class = void> mint nPr(ll n, ll r){
   if(n < 0 || r < 0 || r > n) return 0;
   return fact[n] * fact_inv[n - r];
 }
-inline mint nHr(ll n, ll r){
+template<class = void> mint nHr(ll n, ll r){
   if(n == 0 && r == 0) return 1;
   return nCr(n + r - 1, r);
 }
 // rolling hash (mod 2^61-1, random base)
-struct RollingHash{
+template<class = void> struct RollingHash_t{
   using u64 = unsigned long long;
   static constexpr u64 MOD = (1ULL << 61) - 1;
   static u64 mul(u64 a, u64 b){
@@ -866,7 +870,7 @@ struct RollingHash{
     while((int)pw.size() <= n) pw.push_back(mul(pw.back(), base));
   }
   vector<u64> h;
-  template<class S> RollingHash(const S& s){
+  template<class S> RollingHash_t(const S& s){
     int n = s.size();
     ensure(n);
     h.assign(n + 1, 0);
@@ -876,7 +880,8 @@ struct RollingHash{
   u64 get(int l, int r) const { return add(h[r], MOD - mul(h[l], pw[r - l])); }
   static u64 connect(u64 h1, u64 h2, int len2){ ensure(len2); return add(mul(h1, pw[len2]), h2); }
 };
-inline int lcp(const RollingHash& a, int i, const RollingHash& b, int j){
+using RollingHash = RollingHash_t<>;
+template<class = void> int lcp(const RollingHash& a, int i, const RollingHash& b, int j){
   int lo = 0, hi = min(a.size() - i, b.size() - j);
   while(lo < hi){
     int m = (lo + hi + 1) / 2;
@@ -888,4 +893,7 @@ inline int lcp(const RollingHash& a, int i, const RollingHash& b, int j){
 #pragma endregion
 
 int main(){
+  ios::sync_with_stdio(false);
+  cin.tie(nullptr);
+
 }

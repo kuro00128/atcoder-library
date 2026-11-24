@@ -36,7 +36,8 @@ template<class = void> ll ipow(ll x, ll n){
   ll ret = 1;
   while(n > 0){
     if(n & 1) ret *= x;
-    x *= x, n >>= 1;
+    n >>= 1;
+    if(n > 0) x *= x;
   }
   return ret;
 }
@@ -217,4 +218,7 @@ template<class = void> int lcp(const RollingHash& a, int i, const RollingHash& b
 
 
 int main(){
+  ios::sync_with_stdio(false);
+  cin.tie(nullptr);
+
 }
