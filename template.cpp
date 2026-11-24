@@ -1,12 +1,13 @@
-#pragma region header
 //https://github.com/kuro00128/atcoder-library
 //上がatcoderのライブラリ置き場です
+#pragma region header
 #include <bits/stdc++.h>
 #include <atcoder/modint>
 #include <atcoder/dsu>
 #include <atcoder/fenwicktree>
 #include <atcoder/segtree>
 #include <atcoder/lazysegtree>
+// other ACL: e.g. #include <atcoder/maxflow>
 
 using namespace std;
 using namespace atcoder;
@@ -15,7 +16,6 @@ using namespace atcoder;
 #else
 #define debug(...)
 #endif
-#pragma endregion
 typedef long long ll;
 typedef unsigned long long ull;
 typedef long double lb;
@@ -26,19 +26,21 @@ const ll INF = 1LL << 60;
 const ll mod = 998244353;
 //using mint = modint1000000007;
 using mint = modint998244353;
+#pragma endregion
+
+#pragma region my library
+
 mt19937_64 rng(10);
-vector<int> dx = {1, 0, -1, 0}, dy = {0, 1, 0, -1};
-#pragma region library
-inline ll ipow(ll x, ll n){
+constexpr int dx[4] = {1, 0, -1, 0}, dy[4] = {0, 1, 0, -1};
+template<class = void> ll ipow(ll x, ll n){
   ll ret = 1;
   while(n > 0){
     if(n & 1) ret *= x;
-    n >>= 1;
-    if(n > 0) x *= x;
+    x *= x, n >>= 1;
   }
   return ret;
 }
-inline ll powmod(ll x, ll n, ll m){
+template<class = void> ll powmod(ll x, ll n, ll m){
   ll ret = 1 % m;
   x %= m;
   if(x < 0) x += m;
@@ -49,7 +51,7 @@ inline ll powmod(ll x, ll n, ll m){
   }
   return ret;
 }
-inline vector<pair<char, ll>> rle(string s){
+template<class = void> vector<pair<char, ll>> rle(string s){
   vector<pair<char, ll>> res;
   ll cnt = 1;
   for(int i = 1; i < (int)s.size(); i++){
@@ -62,10 +64,10 @@ inline vector<pair<char, ll>> rle(string s){
   res.push_back({s.back(), cnt});
   return res;
 }
-inline vector<pair<ll, ll>> rle(vector<ll> s){
+template<class = void> vector<pair<ll, ll>> rle(vector<ll> s){
   vector<pair<ll, ll>> res;
   ll cnt = 1;
-  for(int i = 1; i < s.size(); i++){
+  for(int i = 1; i < (int)s.size(); i++){
     if(s[i] != s[i - 1]){
       res.push_back({s[i - 1], cnt});
       cnt = 0;
@@ -74,14 +76,6 @@ inline vector<pair<ll, ll>> rle(vector<ll> s){
   }
   res.push_back({s.back(), cnt});
   return res;
-}
-// 二分探索の型：f(ok) = true, f(ng) = false を保つ。ループ本体は変えない
-template<class F> ll bsearch(ll ok, ll ng, F f){
-  while(abs(ok - ng) > 1){
-    ll mid = (ok + ng) / 2;
-    if(f(mid)) ok = mid; else ng = mid;
-  }
-  return ok;
 }
 template<class T> struct UnionFind{
   vector<int> par, siz;
@@ -107,6 +101,7 @@ template<class T> struct UnionFind{
   bool issame(int x, int y){
     return root(x) == root(y);
   }
+  // weight(y) - weight(x) = w
   bool merge(int x, int y, T w){
     w += weight(x); w -= weight(y);
     x = root(x); y = root(y);
@@ -124,6 +119,7 @@ template<class T> struct UnionFind{
     return siz[root(x)];
   }
 };
+//* added 2026/9/30 *//
 struct Point{
   ll x, y;
   Point operator+(const Point &p) const{ return {x + p.x, y + p.y}; }
@@ -135,24 +131,25 @@ struct Point{
   }
 };
 
-inline ll dot(Point a, Point b){ return a.x * b.x + a.y * b.y; }
+template<class = void> ll dot(Point a, Point b){ return a.x * b.x + a.y * b.y; }
 
-inline ll cross(Point a, Point b){ return a.x * b.y - a.y * b.x; }
+template<class = void> ll cross(Point a, Point b){ return a.x * b.y - a.y * b.x; }
 
-inline ll dist2(Point a, Point b){
+template<class = void> ll dist2(Point a, Point b){
   ll dx = a.x - b.x;
   ll dy = a.y - b.y;
   return dx * dx + dy * dy;
 }
-inline bool intersect(Point A, Point B, Point C, Point D){
+template<class = void> bool intersect(Point A, Point B, Point C, Point D){
   ll c1 = cross(B - A, C - A);
   ll c2 = cross(B - A, D - A);
   ll c3 = cross(D - C, A - C);
   ll c4 = cross(D - C, B - C);
   return ((c1 > 0 and c2 < 0) or (c1 < 0 and c2 > 0)) and ((c3 > 0 and c4 < 0) or (c3 < 0 and c4 > 0));
 }
+// combination: call comb_init(n) before use
 vector<mint> fact, fact_inv, inv;
-inline void comb_init(int n){
+template<class = void> void comb_init(int n){
   fact.assign(n + 1, 1);
   fact_inv.assign(n + 1, 1);
   inv.assign(n + 1, 1);
@@ -162,48 +159,62 @@ inline void comb_init(int n){
     fact_inv[i] = fact_inv[i - 1] * inv[i];
   }
 }
-inline mint nCr(ll n, ll r){
+template<class = void> mint nCr(ll n, ll r){
   if(n < 0 || r < 0 || r > n) return 0;
   return fact[n] * fact_inv[r] * fact_inv[n - r];
 }
-inline mint nPr(ll n, ll r){
+template<class = void> mint nPr(ll n, ll r){
   if(n < 0 || r < 0 || r > n) return 0;
   return fact[n] * fact_inv[n - r];
 }
-inline mint nHr(ll n, ll r){
+template<class = void> mint nHr(ll n, ll r){
   if(n == 0 && r == 0) return 1;
   return nCr(n + r - 1, r);
 }
-struct RollingHash {
+// rolling hash (mod 2^61-1, random base)
+template<class = void> struct RollingHash_t{
   using u64 = unsigned long long;
   static constexpr u64 MOD = (1ULL << 61) - 1;
-  static u64 mul(u64 a, u64 b) { return (u64)((__uint128_t)a * b % MOD); }
-  static u64 base() {
-    static const u64 B = std::mt19937_64(
-        chrono::steady_clock::now().time_since_epoch().count())() % (MOD - 2) + 2;
-    return B;
+  static u64 mul(u64 a, u64 b){
+    __uint128_t t = (__uint128_t)a * b;
+    u64 r = (u64)(t >> 61) + (u64)(t & MOD);
+    if(r >= MOD) r -= MOD;
+    if(r >= MOD) r -= MOD;
+    return r;
   }
- 
-  std::vector<u64> H, pw;
-  RollingHash(const string &s) { init(s); }
-  void init(const string &s) {
-    int n = s.size();
-    H.assign(n + 1, 0);
-    pw.assign(n + 1, 1);
-    for (int i = 0; i < n; i++) {
-      H[i + 1] = (mul(H[i], base()) + s[i]) % MOD;
-      pw[i + 1] = mul(pw[i], base());
+  static u64 add(u64 a, u64 b){ a += b; return a >= MOD ? a - MOD : a; }
+  static inline u64 base = 0;
+  static inline vector<u64> pw{1};
+  static void ensure(int n){
+    if(base == 0){
+      mt19937_64 r(chrono::steady_clock::now().time_since_epoch().count());
+      base = r() % (MOD - 2) + 2;
     }
+    while((int)pw.size() <= n) pw.push_back(mul(pw.back(), base));
   }
-  u64 get(int l, int r) const {
-    return (H[r] + MOD - mul(H[l], pw[r - l])) % MOD;
+  vector<u64> h;
+  template<class S> RollingHash_t(const S& s){
+    int n = s.size();
+    ensure(n);
+    h.assign(n + 1, 0);
+    for(int i = 0; i < n; i++) h[i + 1] = add(mul(h[i], base), (u64)s[i] % MOD + 1);
   }
-   u64 combine(u64 X, u64 Y, ll len) const{
-    return (mul(X, pw[len]) + Y) % MOD;
-  }
+  int size() const { return (int)h.size() - 1; }
+  u64 get(int l, int r) const { return add(h[r], MOD - mul(h[l], pw[r - l])); }
+  static u64 connect(u64 h1, u64 h2, int len2){ ensure(len2); return add(mul(h1, pw[len2]), h2); }
 };
+using RollingHash = RollingHash_t<>;
+template<class = void> int lcp(const RollingHash& a, int i, const RollingHash& b, int j){
+  int lo = 0, hi = min(a.size() - i, b.size() - j);
+  while(lo < hi){
+    int m = (lo + hi + 1) / 2;
+    if(a.get(i, i + m) == b.get(j, j + m)) lo = m;
+    else hi = m - 1;
+  }
+  return lo;
+}
 #pragma endregion
+
+
 int main(){
-  ios::sync_with_stdio(false); 
-  cin.tie(nullptr);
 }
