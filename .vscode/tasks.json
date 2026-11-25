@@ -18,7 +18,7 @@
     {
       "label": "test",
       "type": "shell",
-      "command": "if [ -d test ]; then ASAN_OPTIONS=handle_abort=1 ${env:HOME}/.local/bin/oj t -c ./a.out -d test; else echo 'Build OK (no tests)'; fi",
+      "command": "if [ -d test ]; then ${env:HOME}/.local/bin/oj t -c ./fast.out -d test --tle 2; elif [ -f in.txt ]; then { time timeout 10 ./fast.out < in.txt > out.txt; } 2>&1 | grep real; echo '--- output (first 5 lines) ---'; head -5 out.txt; else echo 'no test/ or in.txt'; fi",
       "options": { "cwd": "${fileDirname}" },
       "dependsOn": "build",
       "group": { "kind": "build", "isDefault": true },

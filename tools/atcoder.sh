@@ -159,6 +159,8 @@ pv() { _atc_move -1; }
 cr()  { g++ $ATC_CXXFLAGS main.cpp -o a.out && ./a.out "$@"; }
 # compile & run naive.cpp: crn / crn < test/stress-1.in
 crn() { g++ $ATC_CXXFLAGS naive.cpp -o naive.out && ./naive.out "$@"; }
+# compile with -O2 (like the judge) & run with time: crf / crf < in.txt
+crf() { g++ -std=c++20 -O2 -I $HOME/ac-library main.cpp -o fast.out && time ./fast.out "$@"; }
 alias r='./a.out'
 alias ri='./a.out < in.txt'
 
