@@ -8,17 +8,17 @@
       "args": [
         "-include", "${env:HOME}/pch/all.h", "-Winvalid-pch",
         "-std=c++20", "-O0", "-g", "-fno-omit-frame-pointer",
-                "-Wall", "-Wextra", "-Wno-sign-compare", "-Wno-unknown-pragmas",
+        "-Wall", "-Wextra", "-Wno-sign-compare", "-Wno-unknown-pragmas",
         "-DLOCAL", "-D_GLIBCXX_DEBUG", "-fsanitize=address,undefined",
         "-I", "${env:HOME}/ac-library", "-I", "${env:HOME}/atcoder/lib",
-        "${file}", "-o", "${fileDirname}/a.out"
+        "${fileDirname}/main.cpp", "-o", "${fileDirname}/a.out"
       ],
       "problemMatcher": ["$gcc"]
     },
     {
       "label": "test",
       "type": "shell",
-      "command": "if [ -d test ]; then ${env:HOME}/.local/bin/oj t -c ./fast.out -d test --tle 2; elif [ -f in.txt ]; then { time timeout 10 ./fast.out < in.txt > out.txt; } 2>&1 | grep real; echo '--- output (first 5 lines) ---'; head -5 out.txt; else echo 'no test/ or in.txt'; fi",
+      "command": "if [ -d test ]; then ASAN_OPTIONS=handle_abort=1 ${env:HOME}/.local/bin/oj t -c ./a.out -d test; else echo 'Build OK (no tests)'; fi",
       "options": { "cwd": "${fileDirname}" },
       "dependsOn": "build",
       "group": { "kind": "build", "isDefault": true },
@@ -39,14 +39,14 @@
       "args": [
         "-std=c++20", "-O2",
         "-I", "${env:HOME}/ac-library",
-        "${file}", "-o", "${fileDirname}/fast.out"
+        "${fileDirname}/main.cpp", "-o", "${fileDirname}/fast.out"
       ],
       "problemMatcher": ["$gcc"]
     },
     {
       "label": "test-fast",
       "type": "shell",
-      "command": "${env:HOME}/.local/bin/oj t -c ./fast.out -d test --tle 2",
+      "command": "if [ -d test ]; then ${env:HOME}/.local/bin/oj t -c ./fast.out -d test --tle 2; elif [ -f in.txt ]; then { time timeout 10 ./fast.out < in.txt > out.txt; } 2>&1 | grep real; echo '--- output (first 5 lines) ---'; head -5 out.txt; else echo 'no test/ or in.txt'; fi",
       "options": { "cwd": "${fileDirname}" },
       "dependsOn": "build-fast",
       "problemMatcher": []
@@ -54,20 +54,20 @@
     {
       "label": "copy",
       "type": "shell",
-      "command": "/mnt/c/Windows/System32/clip.exe < '${file}' && echo 'Copied'",
+      "command": "/mnt/c/Windows/System32/clip.exe < '${fileDirname}/main.cpp' && echo 'Copied'",
       "problemMatcher": []
     },
     {
       "label": "submit",
       "type": "shell",
-      "command": "${env:HOME}/atcoder/tools/submit.sh '${file}'",
+      "command": "${env:HOME}/atcoder/tools/submit.sh '${fileDirname}/main.cpp'",
       "dependsOn": "test",
       "problemMatcher": []
     },
     {
       "label": "reset",
       "type": "shell",
-      "command": "cp ~/atcoder/template.cpp '${file}' && echo 'reset: ${file}'",
+      "command": "cp ~/atcoder/template.cpp '${fileDirname}/main.cpp' && echo 'reset: ${fileDirname}/main.cpp'",
       "problemMatcher": []
     }
   ]
